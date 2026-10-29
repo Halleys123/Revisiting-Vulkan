@@ -1,0 +1,7 @@
+.cache
+build
+build-clangd
+__cmake_systeminformation
+
+*.exe
+*.bak

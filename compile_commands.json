@@ -1,0 +1,146 @@
+[
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DASSET_DIR=\\\"E:/Projects/Learning/Vulkan/Revisiting/build-clangd\\\" -DDEBUG_MODE -DGLFW_INCLUDE_VULKAN -DGLM_FORCE_DEPTH_ZERO_TO_ONE -DGLM_FORCE_RADIANS -DNOMINMAX -DVK_USE_PLATFORM_WIN32_KHR -D_MBCS -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\.\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\glm -external:I\"E:\\Softwares\\Vulkan SDK\\include\" -external:W0 /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++17 -MDd -RTC1 -Zi /EHsc /FoCMakeFiles\\main.dir\\main.cpp.obj /FdCMakeFiles\\main.dir\\ /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\main.cpp",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/main.cpp",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/CMakeFiles/main.dir/main.cpp.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -DASSET_DIR=\\\"E:/Projects/Learning/Vulkan/Revisiting/build-clangd\\\" -DDEBUG_MODE -DGLFW_INCLUDE_VULKAN -DGLM_FORCE_DEPTH_ZERO_TO_ONE -DGLM_FORCE_RADIANS -DNOMINMAX -DVK_USE_PLATFORM_WIN32_KHR -D_MBCS -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\.\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\glm -external:I\"E:\\Softwares\\Vulkan SDK\\include\" -external:W0 /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++17 -MDd -RTC1 -Zi /EHsc /FoCMakeFiles\\main.dir\\src\\VulkanRenderer.cpp.obj /FdCMakeFiles\\main.dir\\ /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\src\\VulkanRenderer.cpp",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/src/VulkanRenderer.cpp",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/CMakeFiles/main.dir/src/VulkanRenderer.cpp.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\context.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\context.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/context.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/context.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\init.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\init.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/init.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/init.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\input.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\input.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/input.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/input.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\monitor.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\monitor.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/monitor.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/monitor.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\platform.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\platform.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/platform.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/platform.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\vulkan.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\vulkan.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/vulkan.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/vulkan.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\window.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\window.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/window.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/window.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\egl_context.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\egl_context.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/egl_context.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/egl_context.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\osmesa_context.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\osmesa_context.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/osmesa_context.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/osmesa_context.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\null_init.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\null_init.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/null_init.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/null_init.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\null_monitor.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\null_monitor.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/null_monitor.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/null_monitor.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\null_window.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\null_window.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/null_window.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/null_window.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\null_joystick.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\null_joystick.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/null_joystick.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/null_joystick.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\win32_module.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\win32_module.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/win32_module.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/win32_module.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\win32_time.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\win32_time.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/win32_time.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/win32_time.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\win32_thread.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\win32_thread.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/win32_thread.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/win32_thread.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\win32_init.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\win32_init.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/win32_init.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/win32_init.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\win32_joystick.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\win32_joystick.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/win32_joystick.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/win32_joystick.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\win32_monitor.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\win32_monitor.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/win32_monitor.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/win32_monitor.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\win32_window.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\win32_window.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/win32_window.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/win32_window.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo -DUNICODE -D_CRT_SECURE_NO_WARNINGS -D_GLFW_WIN32 -D_UNICODE -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\include -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\build-clangd\\externals\\GLFW\\src /DWIN32 /D_WINDOWS /Ob0 /Od -MDd -RTC1 -Zi /W3 /Foexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\wgl_context.c.obj /Fdexternals\\GLFW\\src\\CMakeFiles\\glfw.dir\\glfw.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\GLFW\\src\\wgl_context.c",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/GLFW/src/wgl_context.c",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/GLFW/src/CMakeFiles/glfw.dir/wgl_context.c.obj"
+},
+{
+  "directory": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd",
+  "command": "C:\\PROGRA~1\\MICROS~1\\18\\COMMUN~1\\VC\\Tools\\MSVC\\1451~1.362\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP -IE:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\glm /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od -std:c++17 -MDd -RTC1 -Zi /Za /fp:precise /Foexternals\\glm\\glm\\CMakeFiles\\glm.dir\\detail\\glm.cpp.obj /Fdexternals\\glm\\glm\\CMakeFiles\\glm.dir\\glm.pdb /FS -c E:\\Projects\\Learning\\Vulkan\\Revisiting\\externals\\glm\\glm\\detail\\glm.cpp",
+  "file": "E:/Projects/Learning/Vulkan/Revisiting/externals/glm/glm/detail/glm.cpp",
+  "output": "E:/Projects/Learning/Vulkan/Revisiting/build-clangd/externals/glm/glm/CMakeFiles/glm.dir/detail/glm.cpp.obj"
+}
+]
