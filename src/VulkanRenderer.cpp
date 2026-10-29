@@ -21,6 +21,7 @@ VulkanRenderer::~VulkanRenderer() {
 
 void VulkanRenderer::initialize() {
     createVulkanInstance();
+    createSurface();
     getPhysicalDevice();
     createLogicalDevice();
 }
@@ -297,11 +298,13 @@ int32_t VulkanRenderer::isPhysicalDeviceSuitable(VkPhysicalDevice physicalDevice
 
     LOG_INFO("%s", table.c_str());
 
-    if(graphicsFamilyIndexes.size() == 0) {
+    // LOG_INFO("%s GPU have %d Graphics Queue Family and %d Present Queue Family", properties.deviceName, graphicsFamilyIndexes.size())
+
+    if(tempGraphicsFamilyIndexes.size() == 0) {
         LOG_ERROR("%s does not support graphics family", properties.deviceName);
         return -1;
     }
-    if(presentFamilyIndexes.size() == 0) {
+    if(tempPresentFamilyIndexes.size() == 0) {
         LOG_ERROR("%s does not support presentation queue family.", properties.deviceName);
         return -1;
     }

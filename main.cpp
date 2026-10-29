@@ -15,7 +15,7 @@ int main() {
 
     GLFWwindow* myWindow = glfwCreateWindow(1280, 800, "Vulkan Revisiting", nullptr, nullptr);
 
-    VulkanRenderer render;
+    VulkanRenderer render(myWindow);
     render.initialize();
 
     while(!glfwWindowShouldClose(myWindow)) {
