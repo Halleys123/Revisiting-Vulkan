@@ -1,0 +1,1 @@
+This repository is used for learning Vulkan, mostly this is a revisit on the concepts that are present in vulkan while making notes about the concepts and important functions that are used in the folder.

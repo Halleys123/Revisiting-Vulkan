@@ -2,11 +2,18 @@
 #include "GLFW/glfw3.h"
 #include "Logger.hpp"
 
+#include <algorithm>
 #include <cstring>
+#include <propidl.h>
 #include <vulkan/vk_enum_string_helper.h>
 
 #include <stdexcept>
 #include <vector>
+
+VulkanRenderer::VulkanRenderer(GLFWwindow *window) {
+    this->window = window;
+}
+
 
 VulkanRenderer::~VulkanRenderer() {
     this->cleanup();
@@ -19,8 +26,9 @@ void VulkanRenderer::initialize() {
 }
 
 void VulkanRenderer::cleanup() {
-    vkDestroyDevice(vulkanLogicalDevice, nullptr);
-    vkDestroyInstance(vulkanInstance, nullptr);
+    if(vulkanLogicalDevice != VK_NULL_HANDLE) vkDestroyDevice(vulkanLogicalDevice, nullptr);
+    if(vulkanSurface != VK_NULL_HANDLE) vkDestroySurfaceKHR(vulkanInstance, vulkanSurface, nullptr);
+    if(vulkanInstance != VK_NULL_HANDLE) vkDestroyInstance(vulkanInstance, nullptr);
 }
 
 void VulkanRenderer::createVulkanInstance() {
@@ -87,6 +95,9 @@ void VulkanRenderer::createVulkanInstance() {
     throw std::runtime_error("Unable to create Vulkan Instance");
   }
 }
+void VulkanRenderer::createSurface() {
+    glfwCreateWindowSurface(vulkanInstance, this->window, nullptr, &vulkanSurface);
+}
 
 void VulkanRenderer::getPhysicalDevice() {
     uint32_t physicalDeviceCount;
@@ -114,25 +125,67 @@ void VulkanRenderer::getPhysicalDevice() {
         throw std::runtime_error("Unable to obtain a GPU with required features.");
     }
 }
+
 void VulkanRenderer::createLogicalDevice() {
-    VkDeviceCreateInfo logicalDeviceCreateInfo = {};
+    // Default: first graphics family and first present family
+    auto graphicsQueueFamily = static_cast<uint32_t>(graphicsFamilyIndexes[0]);
+    auto presentQueueFamily  = static_cast<uint32_t>(presentFamilyIndexes[0]);
 
-    logicalDeviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    logicalDeviceCreateInfo.enabledExtensionCount = this->requiredDeviceExtensions.size();
-    logicalDeviceCreateInfo.ppEnabledExtensionNames = this->requiredDeviceExtensions.data();
-    logicalDeviceCreateInfo.enabledLayerCount = 0;
-    logicalDeviceCreateInfo.ppEnabledLayerNames = nullptr;
-    // logicalDeviceCreateInfo.flags = This is not used now as per vulkan reference and maybe used in future
+    // Two-pointer search for a family that appears in both sorted lists
+    size_t i = 0, j = 0;
+    while (i < graphicsFamilyIndexes.size() && j < presentFamilyIndexes.size()) {
+        if (graphicsFamilyIndexes[i] == presentFamilyIndexes[j]) {
+            graphicsQueueFamily = static_cast<uint32_t>(graphicsFamilyIndexes[i]);
+            presentQueueFamily  = graphicsQueueFamily;
+            break;
+        }
+        else if (graphicsFamilyIndexes[i] < presentFamilyIndexes[j]) {
+            i += 1;
+        }
+        else {
+            j += 1;
+        }
+    }
 
+    float priority = 1.0f;
+    std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 
-    // VkResult result = vkCreateDevice(vulkanPhysicalDevice, &logicalDeviceCreateInfo, nullptr, &vulkanLogicalDevice);
+    VkDeviceQueueCreateInfo graphicsInfo = {};
+    graphicsInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    graphicsInfo.queueFamilyIndex = graphicsQueueFamily;
+    graphicsInfo.queueCount = 1;
+    graphicsInfo.pQueuePriorities = &priority;
+    queueCreateInfos.push_back(graphicsInfo);
 
-    // if(result != VK_SUCCESS) {
-    //     LOG_CRITICAL("Unable to create Vulkan Logical Device");
-    //     LOG_CRITICAL("Exiting program");
-    //     throw std::runtime_error("Unable to create Vulkan Logical Device");
-    // }
+    if (presentQueueFamily != graphicsQueueFamily) {
+        LOG_NOTICE("Presentation Family queue and Graphics family queue did not match, now creating separate queue for presentation");
+        VkDeviceQueueCreateInfo presentInfo = {};
+        presentInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+        presentInfo.queueFamilyIndex = presentQueueFamily;
+        presentInfo.queueCount = 1;
+        presentInfo.pQueuePriorities = &priority;
+        queueCreateInfos.push_back(presentInfo);
+    }
+
+    VkDeviceCreateInfo info = {};
+    info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    info.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+    info.pQueueCreateInfos = queueCreateInfos.data();
+    info.enabledExtensionCount = static_cast<uint32_t>(requiredDeviceExtensions.size());
+    info.ppEnabledExtensionNames = requiredDeviceExtensions.data();
+
+    VkResult result = vkCreateDevice(vulkanPhysicalDevice, &info, nullptr, &vulkanLogicalDevice);
+    if (result != VK_SUCCESS) {
+        LOG_CRITICAL("Unable to create Vulkan Logical Device");
+        throw std::runtime_error("Unable to create Vulkan Logical Device");
+    }
+
+    vkGetDeviceQueue(vulkanLogicalDevice, graphicsQueueFamily, 0, &graphicsQueue);
+    vkGetDeviceQueue(vulkanLogicalDevice, presentQueueFamily,  0, &presentQueue);
+
+    LOG_SUCCESS("Successfully created the logical device");
 }
+
 int32_t VulkanRenderer::isPhysicalDeviceSuitable(VkPhysicalDevice physicalDevice) noexcept {
     // Checking in Chain flow for now or maybe we can divide the features that we want into optional and mandatory features
     // All mandatory features should be available in hardware
@@ -207,36 +260,60 @@ int32_t VulkanRenderer::isPhysicalDeviceSuitable(VkPhysicalDevice physicalDevice
     std::vector<VkQueueFamilyProperties> queueFamilyList(totalQueueFamiliesSupported);
     vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &totalQueueFamiliesSupported, queueFamilyList.data());
 
-    bool graphicsFamilySupport = false;
-
     LOG_INFO("Queue Family details for %s", properties.deviceName);
     std::string table = "Queue families:\n";
+
+    std::vector<int> tempGraphicsFamilyIndexes;
+    std::vector<int> tempComputeFamilyIndexes;
+    std::vector<int> tempTransferFamilyIndexes;
+    std::vector<int> tempSparseFamilyIndexes;
+    std::vector<int> tempPresentFamilyIndexes;
+
     for(int i = 0;i < totalQueueFamiliesSupported;i += 1) {
         auto temp = string_VkQueueFlags(queueFamilyList[i].queueFlags);
         char row[160];
         std::snprintf(row, sizeof(row), "#%u  count=%-2u  %s\n", i, queueFamilyList[i].queueCount, string_VkQueueFlags(queueFamilyList[i].queueFlags).c_str());
         table += row;
 
+        VkBool32 presentSupported = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, vulkanSurface, &presentSupported);
+
         if(queueFamilyList[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
-            graphicsFamilyIndex = i;
-            graphicsFamilySupport = true;
+            tempGraphicsFamilyIndexes.push_back(i);
+        }
+        if(queueFamilyList[i].queueFlags & VK_QUEUE_COMPUTE_BIT) {
+            tempComputeFamilyIndexes.push_back(i);
+        }
+        if(queueFamilyList[i].queueFlags & VK_QUEUE_TRANSFER_BIT) {
+            tempTransferFamilyIndexes.push_back(i);
+        }
+        if(queueFamilyList[i].queueFlags & VK_QUEUE_SPARSE_BINDING_BIT) {
+            tempSparseFamilyIndexes.push_back(i);
+        }
+        if(presentSupported) {
+            tempPresentFamilyIndexes.push_back(i);
         }
     }
 
     LOG_INFO("%s", table.c_str());
 
-    if(graphicsFamilySupport == false) {
+    if(graphicsFamilyIndexes.size() == 0) {
         LOG_ERROR("%s does not support graphics family", properties.deviceName);
         return -1;
     }
-
-    if(vulkanPhysicalDevice == VK_NULL_HANDLE) {
-        vulkanPhysicalDevice = physicalDevice;
+    if(presentFamilyIndexes.size() == 0) {
+        LOG_ERROR("%s does not support presentation queue family.", properties.deviceName);
+        return -1;
     }
-    else {
-        if(properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
-            vulkanPhysicalDevice = physicalDevice;
-        }
+
+    if(vulkanPhysicalDevice == VK_NULL_HANDLE && properties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU) {
+        vulkanPhysicalDevice = physicalDevice;
+
+        graphicsFamilyIndexes   = std::move(tempGraphicsFamilyIndexes);
+        computeFamilyIndexes    = std::move(tempComputeFamilyIndexes);
+        sparseFamilyIndexes     = std::move(tempSparseFamilyIndexes);
+        transferFamilyIndexes   = std::move(tempTransferFamilyIndexes);
+        presentFamilyIndexes    = std::move(tempPresentFamilyIndexes);
     }
 
     return 0;
