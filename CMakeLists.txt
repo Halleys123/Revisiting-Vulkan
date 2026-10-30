@@ -10,6 +10,7 @@ find_package(Vulkan REQUIRED COMPONENTS glslangValidator)
 set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "")
 set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "")
 set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "")
+set(LOGGER_ENABLED "1" CACHE STRING "Enable or disable the logger")
 
 add_subdirectory(externals/GLFW)
 add_subdirectory(externals/glm)
@@ -29,6 +30,7 @@ target_compile_definitions(main PRIVATE
     VK_USE_PLATFORM_WIN32_KHR # Although it can be used, try not to use this
     $<$<CONFIG:Debug>:DEBUG_MODE>
     NOMINMAX
+    LOGGER_ENABLED=${LOGGER_ENABLED}
 )
 
 target_link_libraries(main PRIVATE glfw)

@@ -31,6 +31,13 @@ private:
     VkQueue graphicsQueue = VK_NULL_HANDLE;
     VkQueue presentQueue = VK_NULL_HANDLE;
 
+    // Swapchain Setup
+    VkSwapchainKHR vulkanSwapchain = VK_NULL_HANDLE;
+    VkSurfaceCapabilitiesKHR surfaceCapabilities;
+    VkSurfaceFormatKHR selectedFormat;
+    VkPresentModeKHR selectedPresentMode;
+
+
 public:
     VulkanRenderer(GLFWwindow* window);
     ~VulkanRenderer();
@@ -53,4 +60,10 @@ private:
 
     // Helper functions
     int32_t isPhysicalDeviceSuitable(VkPhysicalDevice physicalDevice) noexcept; // This function primarly checks if the physical device supports the queue that we require in our application.
+
+    // Swapchain Related functions
+    // Primary functions
+    void createSwapchain();
+
+    // Will divide above function later into maybe query and selecting parts
 };

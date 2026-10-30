@@ -1,9 +1,10 @@
 # REQUIREMENTS
 # On windows make command should be used from developer terminal only, otherwise issues may arise
 CONFIG ?= Debug
+LOGGER_ENABLED ?= 1
 
 GENERATOR = "Unix Makefiles"
-FLAGS = -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=$(CONFIG)
+FLAGS = -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_BUILD_TYPE=$(CONFIG) -DLOGGER_ENABLED=$(LOGGER_ENABLED)
 UPDATE_COMPILE_COMMANDS = ./scripts/linux/get_compile_commands.bash
 
 # TODO This script for now don't handle build for release or debug separately, so make those changes in future
@@ -20,10 +21,14 @@ ifeq ($(OS), Windows_NT)
 	.SHELLFLAGS = -NoProfile -Command
 
 	GENERATOR = "Visual Studio 18 2026"
-	FLAGS =
+	FLAGS = -DLOGGER_ENABLED=$(LOGGER_ENABLED)
+
 	RUN_EXECUTABLE = ./build/$(CONFIG)/main.exe
 	UPDATE_COMPILE_COMMANDS = powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/win/get_compile_commands.ps1
 endif
+
+# Records which LOGGER_ENABLED value the build dir was configured with, so changing it forces a CMake reconfigure
+LOGGER_STAMP = build/.logger_$(LOGGER_ENABLED)
 
 .PHONY: all build clangd run update_compile_commands
 
@@ -32,10 +37,15 @@ all: build
 # This order is necessary because in linux build system should run first then only we can copy final command
 build: build/CMakeCache.txt
 	@echo "Building $(CONFIG)"
-	cmake --build build --config $(CONFIG) --config $(CONFIG)
+	cmake --build build --config $(CONFIG)
+
+$(LOGGER_STAMP):
+	cmake -E make_directory build
+	cmake -E rm -f build/.logger_0 build/.logger_1
+	cmake -E touch $@
 
 # Third command should not be removed as it stops multiple regeneration of build system by updating the MakeCache forcefully
-build/CMakeCache.txt: CMakeLists.txt
+build/CMakeCache.txt: CMakeLists.txt $(LOGGER_STAMP)
 	@echo Making the generator
 	cmake -B ./build -S . -G $(GENERATOR) $(FLAGS)
 	cmake -E touch build/CMakeCache.txt

@@ -24,9 +24,11 @@ void VulkanRenderer::initialize() {
     createSurface();
     getPhysicalDevice();
     createLogicalDevice();
+    createSwapchain();
 }
 
 void VulkanRenderer::cleanup() {
+    if(vulkanSwapchain != VK_NULL_HANDLE) vkDestroySwapchainKHR(vulkanLogicalDevice, vulkanSwapchain, nullptr);
     if(vulkanLogicalDevice != VK_NULL_HANDLE) vkDestroyDevice(vulkanLogicalDevice, nullptr);
     if(vulkanSurface != VK_NULL_HANDLE) vkDestroySurfaceKHR(vulkanInstance, vulkanSurface, nullptr);
     if(vulkanInstance != VK_NULL_HANDLE) vkDestroyInstance(vulkanInstance, nullptr);
@@ -43,6 +45,14 @@ void VulkanRenderer::createVulkanInstance() {
   uint32_t glfwExtensionCount = 0;
   const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
+  if (glfwExtensions == nullptr) {
+      LOG_ERROR("GLFW could not find Vulkan instance extensions");
+      throw std::runtime_error("GLFW could not find Vulkan instance extensions");
+  }
+
+  std::vector<const char*> requiredInstanceExtensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
+  requiredInstanceExtensions.push_back(VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME);
+
   VkInstanceCreateInfo VulkanInstanceCreateInfoStruct = {};
 
   VulkanInstanceCreateInfoStruct.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -50,17 +60,16 @@ void VulkanRenderer::createVulkanInstance() {
   // program This contains extensions like swapchain and surface I don't
   // remember properly, but Vulkan API needs to know what are the extensions
   // that we are going to use
-  VulkanInstanceCreateInfoStruct.enabledExtensionCount = glfwExtensionCount;
+  VulkanInstanceCreateInfoStruct.enabledExtensionCount = requiredInstanceExtensions.size();
   VulkanInstanceCreateInfoStruct.enabledLayerCount = 0;
   // This is the layers like validation layer and other layers that we
   // might need in the application
-  VulkanInstanceCreateInfoStruct.ppEnabledExtensionNames = glfwExtensions;
+  VulkanInstanceCreateInfoStruct.ppEnabledExtensionNames = requiredInstanceExtensions.data();
   VulkanInstanceCreateInfoStruct.ppEnabledLayerNames = nullptr;
   VulkanInstanceCreateInfoStruct.pApplicationInfo = &applicationInfo;
 
   uint32_t propertyCount;
   vkEnumerateInstanceExtensionProperties(nullptr, &propertyCount, nullptr);
-
   std::vector<VkExtensionProperties> availableInstanceProperties(propertyCount);
   vkEnumerateInstanceExtensionProperties(nullptr, &propertyCount, availableInstanceProperties.data());
 
@@ -71,18 +80,17 @@ void VulkanRenderer::createVulkanInstance() {
   }
 
   bool allExtensionsSupported = true;
-  for(int i = 0;i < glfwExtensionCount;i += 1) {
+  for(int i = 0;i < requiredInstanceExtensions.size();i += 1) {
       bool isSupported = false;
       for(int j = 0;j < availableInstanceProperties.size();j += 1) {
-          if(strcmp(availableInstanceProperties[j].extensionName, glfwExtensions[i]) == 0) {
-              LOG_SUCCESS("%s required instance extension is supported", glfwExtensions[i]);
+          if(strcmp(availableInstanceProperties[j].extensionName, requiredInstanceExtensions[i]) == 0) {
+              LOG_SUCCESS("%s required instance extension is supported", requiredInstanceExtensions[i]);
               isSupported = true;
           }
       }
-
       if(isSupported == false) {
           allExtensionsSupported = false;
-          LOG_ERROR("%s required instance extension is not supported", glfwExtensions[i]);
+          LOG_ERROR("%s required instance extension is not supported", requiredInstanceExtensions[i]);
       }
   }
 
@@ -320,4 +328,95 @@ int32_t VulkanRenderer::isPhysicalDeviceSuitable(VkPhysicalDevice physicalDevice
     }
 
     return 0;
+}
+
+void VulkanRenderer::createSwapchain() {
+    // Querying formats, and image sizes which are compatible with both window and GPU
+    LOG_NOTICE("Getting Device and Surface compatible capabilites.");
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vulkanPhysicalDevice, vulkanSurface, &this->surfaceCapabilities);
+    LOG_SUCCESS("Retreived information about min/max number of images in swap chain, min/max width and height of images etc");
+    LOG_INFO("Height and Width of image: %d %d", surfaceCapabilities.currentExtent.height, surfaceCapabilities.currentExtent.width);
+
+    // -------------------------------------------------------
+    LOG_NOTICE("Getting Device and Surface Format list.");
+
+    std::vector<VkSurfaceFormatKHR> surfaceFormats;
+    uint32_t surfaceFormatCount = 0;
+
+    vkGetPhysicalDeviceSurfaceFormatsKHR(vulkanPhysicalDevice, vulkanSurface, &surfaceFormatCount, nullptr);
+    surfaceFormats.resize(surfaceFormatCount);
+    LOG_INFO("Found total %d supported formats", surfaceFormatCount);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(vulkanPhysicalDevice, vulkanSurface, &surfaceFormatCount, surfaceFormats.data());
+    LOG_SUCCESS("Filled the surfaceFormats array");
+
+    LOG_NOTICE("Selecting one of the Formats.");
+    bool isFormatAvailable = false;
+    for(auto& i : surfaceFormats) {
+        LOG_DEBUG("Checking %s %s", string_VkFormat(i.format), string_VkColorSpaceKHR(i.colorSpace));
+        if(i.format == VK_FORMAT_B8G8R8A8_SRGB && i.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+            isFormatAvailable = true;
+            this->selectedFormat = i;
+        }
+    }
+
+    if(isFormatAvailable == false) {
+        LOG_CRITICAL("No Compatible Color Space and Format found");
+        throw std::runtime_error("No Compatible Color Space and Format found");
+    }
+
+    // -------------------------------------------------------
+    LOG_NOTICE("Getting supported presenation modes");
+
+    std::vector<VkPresentModeKHR> presentModes;
+    uint32_t presentModeCount = 0;
+
+    vkGetPhysicalDeviceSurfacePresentModesKHR(vulkanPhysicalDevice, vulkanSurface, &presentModeCount, nullptr);
+    LOG_INFO("Found total %d presenation modes", presentModeCount);
+    presentModes.resize(presentModeCount);
+    vkGetPhysicalDeviceSurfacePresentModesKHR(vulkanPhysicalDevice, vulkanSurface, &presentModeCount, presentModes.data());
+    LOG_SUCCESS("Filled the presentation modes array");
+
+    bool isPresentModeAvailable = false;
+    for(auto &i : presentModes) {
+        LOG_DEBUG("Checking %s", string_VkPresentModeKHR(i));
+        if(i == VK_PRESENT_MODE_FIFO_KHR) {
+            this->selectedPresentMode = i;
+            isPresentModeAvailable = true;
+        }
+    }
+
+    if(isPresentModeAvailable == false) {
+        LOG_CRITICAL("No Compatible Presenation mode found");
+        throw std::runtime_error("No Compatible Presenation mode found");
+    }
+
+    // Actually creating the swapchain
+    VkSwapchainCreateInfoKHR swapchainCreateInfo = {};
+
+    swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    swapchainCreateInfo.surface = vulkanSurface;
+    swapchainCreateInfo.flags = 0;
+    swapchainCreateInfo.imageFormat = VK_FORMAT_R8G8B8_UNORM;
+    swapchainCreateInfo.imageExtent = this->surfaceCapabilities.currentExtent;
+    swapchainCreateInfo.imageFormat = this->selectedFormat.format;
+    swapchainCreateInfo.imageColorSpace = this->selectedFormat.colorSpace;
+    swapchainCreateInfo.minImageCount = surfaceCapabilities.minImageCount + 1;
+    swapchainCreateInfo.presentMode = selectedPresentMode;
+
+    // Following properties I don't know about so still need to study about these
+    swapchainCreateInfo.imageArrayLayers = 1;
+    swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    swapchainCreateInfo.clipped = true;
+    swapchainCreateInfo.preTransform = surfaceCapabilities.currentTransform;
+    // swapchainCreateInfo.preTransform = VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR; // TODO Change this to current transformation in future
+
+    VkResult result = vkCreateSwapchainKHR(vulkanLogicalDevice, &swapchainCreateInfo, nullptr, &vulkanSwapchain);
+
+    if(result != VK_SUCCESS) {
+        LOG_CRITICAL("Unable to create Vulkan Swapchain, Exiting program");
+        throw std::runtime_error("Unable to create Vulkan Swapchain, Exiting program");
+    }
+
+    LOG_SUCCESS("Swapchain was created successfully");
 }

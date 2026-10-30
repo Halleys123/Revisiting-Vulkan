@@ -23,6 +23,5 @@ int main() {
     }
 
     glfwTerminate();
-    printf("Working\n");
     return 0;
 }
