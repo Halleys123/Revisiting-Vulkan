@@ -53,7 +53,7 @@ In this part we have two important things to do:
 1. Create Logical Device using `vkCreateDevice`
 2. Get Queue Handles using `vkGetDeviceQueue`
 
-# Swapchain Creation
+# Step 4 - Swapchain Creation
 
 Vulkan does not have any infrastructure prebuilt that handles the images we create, so we need to create an infrastructure that will own the buffers we will render to before we visualize them on the screen. This is known as the `swapchain`.
 
@@ -72,3 +72,28 @@ So after reading a lot about this I found that swapchain can be considered has a
 During GPU selection you only reject a GPU if the list of formats or the list of present modes is empty
 
 `Summary`: So this step is mostly about querying what is present on current system and then selecting from one of the available options, while handling edge cases (like having infinite max image)
+
+After the swapchain is created we need to check if the VkImage is actually assigned to swapchain, get those handles then, create a ImageView for each image, that we are going to use. The functions used are `vkGetSwapchainImagesKHR` and `vkCreateImageView`
+
+# Step 5 - Creation of Graphics Pipeline
+
+This step includes process of hanlding Graphics pipeline and render pass. A graphics pipeline instructs vulkan how graphics are rendered (shaders, vertex input, rasterization, depth testing, blending, etc.). While a render pass defines where and how rendering attachments are used.
+
+Framebuffer - It is a collection of Images for same item, that is a set of images used to render color, normal, depth, stencil etc
+
+## Render Pass
+
+Render pass is used to define the subpasses that we are going to use in the application
+
+1. Which attachments are used (color, depth, stencil, resolve, etc.).
+2. Their formats and sample counts
+3. What happens to their contents before and after rendering.
+4. Their initial, intermediate, and final image layouts.
+5. How rendering is divided into subpasses.
+6. Dependencies and synchronization between subpasses and external operations.
+
+A render pass is composed of attachment descriptions, subpass descriptions, and subpass dependencies.
+
+A subpass represents a logical rendering stage within a render pass.
+
+It defines which attachments are used and how they are accessed during that stage.

@@ -492,4 +492,8 @@ void VulkanRenderer::createSwapchain() {
     createImageViews();
 }
 
-void VulkanRenderer::createRenderPass() {}
+void VulkanRenderer::createRenderPass() {
+    VkRenderPassCreateInfo renderPassCreateInfo = {};
+
+    renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+}
