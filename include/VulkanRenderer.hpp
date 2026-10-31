@@ -34,9 +34,10 @@ private:
     // Swapchain Setup
     VkSwapchainKHR vulkanSwapchain = VK_NULL_HANDLE;
     VkSurfaceCapabilitiesKHR surfaceCapabilities;
-    VkSurfaceFormatKHR selectedFormat;
+    VkSurfaceFormatKHR selectedSurfaceFormat;
     VkPresentModeKHR selectedPresentMode;
-
+    std::vector<VkImage> swapchainImages; // Linking images in swapchain we acquired during creation of swapchain to image views so we can actually use it
+    std::vector<VkImageView> swapchainImageViews; // Linking images in swapchain we acquired during creation of swapchain to image views so we can actually use it
 
 public:
     VulkanRenderer(GLFWwindow* window);
@@ -44,6 +45,7 @@ public:
     void initialize();
 
 private:
+    // No Helper function should be called inside the
     // Cleanup functions
     void cleanup();
 
@@ -62,8 +64,17 @@ private:
     int32_t isPhysicalDeviceSuitable(VkPhysicalDevice physicalDevice) noexcept; // This function primarly checks if the physical device supports the queue that we require in our application.
 
     // Swapchain Related functions
-    // Primary functions
+    // Helper functions
+    void getSurfaceCapabilities();
+    void getSurfaceFormats();
+    void getPresentationModes();
+
+    void getSwapchainImages();
+    void createImageViews();
+
+    // Actual function to create swapchain
     void createSwapchain();
 
-    // Will divide above function later into maybe query and selecting parts
+    // Render Pass Implementation
+    void createRenderPass();
 };

@@ -14,20 +14,26 @@ VulkanRenderer::VulkanRenderer(GLFWwindow *window) {
     this->window = window;
 }
 
-
 VulkanRenderer::~VulkanRenderer() {
     this->cleanup();
 }
 
 void VulkanRenderer::initialize() {
     createVulkanInstance();
+
     createSurface();
+
     getPhysicalDevice();
     createLogicalDevice();
+
     createSwapchain();
 }
 
 void VulkanRenderer::cleanup() {
+    for(VkImageView& imageView : swapchainImageViews) {
+        if(imageView != VK_NULL_HANDLE) vkDestroyImageView(vulkanLogicalDevice, imageView, nullptr);
+    }
+
     if(vulkanSwapchain != VK_NULL_HANDLE) vkDestroySwapchainKHR(vulkanLogicalDevice, vulkanSwapchain, nullptr);
     if(vulkanLogicalDevice != VK_NULL_HANDLE) vkDestroyDevice(vulkanLogicalDevice, nullptr);
     if(vulkanSurface != VK_NULL_HANDLE) vkDestroySurfaceKHR(vulkanInstance, vulkanSurface, nullptr);
@@ -329,15 +335,14 @@ int32_t VulkanRenderer::isPhysicalDeviceSuitable(VkPhysicalDevice physicalDevice
 
     return 0;
 }
-
-void VulkanRenderer::createSwapchain() {
+void VulkanRenderer::getSurfaceCapabilities() {
     // Querying formats, and image sizes which are compatible with both window and GPU
     LOG_NOTICE("Getting Device and Surface compatible capabilites.");
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(vulkanPhysicalDevice, vulkanSurface, &this->surfaceCapabilities);
     LOG_SUCCESS("Retreived information about min/max number of images in swap chain, min/max width and height of images etc");
     LOG_INFO("Height and Width of image: %d %d", surfaceCapabilities.currentExtent.height, surfaceCapabilities.currentExtent.width);
-
-    // -------------------------------------------------------
+}
+void VulkanRenderer::getSurfaceFormats() {
     LOG_NOTICE("Getting Device and Surface Format list.");
 
     std::vector<VkSurfaceFormatKHR> surfaceFormats;
@@ -355,7 +360,7 @@ void VulkanRenderer::createSwapchain() {
         LOG_DEBUG("Checking %s %s", string_VkFormat(i.format), string_VkColorSpaceKHR(i.colorSpace));
         if(i.format == VK_FORMAT_B8G8R8A8_SRGB && i.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
             isFormatAvailable = true;
-            this->selectedFormat = i;
+            this->selectedSurfaceFormat = i;
         }
     }
 
@@ -363,8 +368,8 @@ void VulkanRenderer::createSwapchain() {
         LOG_CRITICAL("No Compatible Color Space and Format found");
         throw std::runtime_error("No Compatible Color Space and Format found");
     }
-
-    // -------------------------------------------------------
+}
+void VulkanRenderer::getPresentationModes() {
     LOG_NOTICE("Getting supported presenation modes");
 
     std::vector<VkPresentModeKHR> presentModes;
@@ -389,26 +394,89 @@ void VulkanRenderer::createSwapchain() {
         LOG_CRITICAL("No Compatible Presenation mode found");
         throw std::runtime_error("No Compatible Presenation mode found");
     }
+}
 
-    // Actually creating the swapchain
+
+void VulkanRenderer::getSwapchainImages() {
+    LOG_NOTICE("Now trying to acquire `VkImage` (Image handle) of each Swapchain Image");
+    LOG_NOTICE("Checking acutal image count of the images assigned to Swapchain");
+
+    uint32_t swapchainImageCount = 0;
+    vkGetSwapchainImagesKHR(vulkanLogicalDevice, vulkanSwapchain, &swapchainImageCount, nullptr);
+    LOG_INFO("Swapchain have %d image assigned.", swapchainImageCount);
+    swapchainImages.resize(swapchainImageCount);
+    vkGetSwapchainImagesKHR(vulkanLogicalDevice, vulkanSwapchain, &swapchainImageCount, swapchainImages.data());
+    LOG_SUCCESS("Succesfully obtained %d Swapchain Image Handles", swapchainImageCount);
+
+}
+
+void VulkanRenderer::createImageViews() {
+    LOG_NOTICE("Creating Image View Handles for each Swapchain Image");
+
+    if(swapchainImages.size() == 0) {
+        LOG_CRITICAL("Swapchain was not assinged any image hence exiting the program");
+        throw std::runtime_error("Unable to create swapchain image views");
+    }
+
+    VkImageViewCreateInfo imageViewCreateInfo = {};
+    swapchainImageViews.resize(swapchainImages.size());
+
+    imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    imageViewCreateInfo.components = {VK_COMPONENT_SWIZZLE_IDENTITY, VK_COMPONENT_SWIZZLE_IDENTITY, VK_COMPONENT_SWIZZLE_IDENTITY, VK_COMPONENT_SWIZZLE_IDENTITY};
+    imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    imageViewCreateInfo.format = selectedSurfaceFormat.format;
+
+    imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+    imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+    imageViewCreateInfo.subresourceRange.layerCount = 1; // Number of a4rray layers that we set earlier when creating swapchain
+    imageViewCreateInfo.subresourceRange.levelCount = 1;
+
+    uint32_t i = 0;
+    for(const VkImage& image : swapchainImages) {
+        LOG_NOTICE("Attempting to create image view for Image Handle %d", i);
+        imageViewCreateInfo.image = image;
+        VkResult result = vkCreateImageView(vulkanLogicalDevice, &imageViewCreateInfo, nullptr, &swapchainImageViews[i]);
+        if(result != VK_SUCCESS) {
+            LOG_CRITICAL("Unable to acquire the Image View for %d Image", i);
+            throw std::runtime_error("Unable to acquire the image view for all images");
+        }
+
+        i += 1;
+        LOG_SUCCESS("Succesfully created image view for Image %d", i);
+    }
+
+    LOG_SUCCESS("Successfully acquired all the image view handles");
+}
+
+void VulkanRenderer::createSwapchain() {
+    getSurfaceCapabilities();
+    getSurfaceFormats();
+    getPresentationModes();
+
+    // Actually creating surface formats;
     VkSwapchainCreateInfoKHR swapchainCreateInfo = {};
+
+    uint32_t minImageCountAdjusted = std::clamp(surfaceCapabilities.minImageCount + 1, 0U, surfaceCapabilities.maxImageCount);
 
     swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     swapchainCreateInfo.surface = vulkanSurface;
     swapchainCreateInfo.flags = 0;
     swapchainCreateInfo.imageFormat = VK_FORMAT_R8G8B8_UNORM;
     swapchainCreateInfo.imageExtent = this->surfaceCapabilities.currentExtent;
-    swapchainCreateInfo.imageFormat = this->selectedFormat.format;
-    swapchainCreateInfo.imageColorSpace = this->selectedFormat.colorSpace;
-    swapchainCreateInfo.minImageCount = surfaceCapabilities.minImageCount + 1;
+    swapchainCreateInfo.imageFormat = this->selectedSurfaceFormat.format;
+    swapchainCreateInfo.imageColorSpace = this->selectedSurfaceFormat.colorSpace;
+    swapchainCreateInfo.minImageCount = minImageCountAdjusted;
     swapchainCreateInfo.presentMode = selectedPresentMode;
+    swapchainCreateInfo.preTransform = surfaceCapabilities.currentTransform;
 
     // Following properties I don't know about so still need to study about these
-    swapchainCreateInfo.imageArrayLayers = 1;
-    swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    // Update now I have studied but keeping above line just in case, as these are kind of not too intutuve for me
+    swapchainCreateInfo.clipped = true;                                     // For easy understanding this just means the driver will clip the pixels that are covered by other window.
+    swapchainCreateInfo.imageArrayLayers = 1;                               // This property is used for VR devices where we might need more than 1 image layers for normal windows this value is 1
+    swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
     swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    swapchainCreateInfo.clipped = true;
-    swapchainCreateInfo.preTransform = surfaceCapabilities.currentTransform;
+    swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
     // swapchainCreateInfo.preTransform = VK_SURFACE_TRANSFORM_ROTATE_180_BIT_KHR; // TODO Change this to current transformation in future
 
     VkResult result = vkCreateSwapchainKHR(vulkanLogicalDevice, &swapchainCreateInfo, nullptr, &vulkanSwapchain);
@@ -419,4 +487,9 @@ void VulkanRenderer::createSwapchain() {
     }
 
     LOG_SUCCESS("Swapchain was created successfully");
+
+    getSwapchainImages();
+    createImageViews();
 }
+
+void VulkanRenderer::createRenderPass() {}
