@@ -176,14 +176,14 @@ void VulkanRenderer::createLogicalDevice() {
         queueCreateInfos.push_back(presentInfo);
     }
 
-    VkDeviceCreateInfo info = {};
-    info.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    info.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
-    info.pQueueCreateInfos = queueCreateInfos.data();
-    info.enabledExtensionCount = static_cast<uint32_t>(requiredDeviceExtensions.size());
-    info.ppEnabledExtensionNames = requiredDeviceExtensions.data();
+    VkDeviceCreateInfo deviceCreateInfo = {};
+    deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
+    deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
+    deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(requiredDeviceExtensions.size());
+    deviceCreateInfo.ppEnabledExtensionNames = requiredDeviceExtensions.data();
 
-    VkResult result = vkCreateDevice(vulkanPhysicalDevice, &info, nullptr, &vulkanLogicalDevice);
+    VkResult result = vkCreateDevice(vulkanPhysicalDevice, &deviceCreateInfo, nullptr, &vulkanLogicalDevice);
     if (result != VK_SUCCESS) {
         LOG_CRITICAL("Unable to create Vulkan Logical Device");
         throw std::runtime_error("Unable to create Vulkan Logical Device");
