@@ -97,3 +97,21 @@ A render pass is composed of attachment descriptions, subpass descriptions, and 
 A subpass represents a logical rendering stage within a render pass.
 
 It defines which attachments are used and how they are accessed during that stage.
+
+--- 
+
+More clear information on Render Pass and Subpass from [YouTube RenderPass](https://www.youtube.com/watch?v=yeKxsmlvvus)
+
+We can think of a Subpasses as a list of rendering task taking place in some specific order taking some inputs and outputs and having some dependency.
+
+Render pass is a collection of attachments, subpass and dependency between the subpaseses.
+
+An attachment corresponds to a single Vulkan VkImageView
+
+A very good read through if you want to understand Render Pass is [Samsung Vulkan Render Pass](https://developer.samsung.com/galaxy-gamedev/resources/articles/renderpasses.html)
+
+```txt
+Okay and where is this index coming from when setting VkAttachmentReference.attachment that is an index of the image that we will use right? Where is that coming from, because I don't remember setting any index for any attachment we are going to use, also this does not feel like this is the the index of VkImage that we got when creating Swapchain, is this index directly related to the attachments that we pass to the renderpass, let's say render pass knows we have 3 attachments and we tell those description in some order let's say color, depth and some other property-x? Also when I queried from the swapchain I know that I have only three image to draw to, then how are we telling render pass to use multiple attachments when we can draw to one only, or are those different images that are used during the render pass
+```
+
+> Above is a prompt I gave claude to clarify doubts, and I found whatever I was thinking was also right.

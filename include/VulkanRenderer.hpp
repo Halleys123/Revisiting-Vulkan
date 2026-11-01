@@ -39,6 +39,9 @@ private:
     std::vector<VkImage> swapchainImages; // Linking images in swapchain we acquired during creation of swapchain to image views so we can actually use it
     std::vector<VkImageView> swapchainImageViews; // Linking images in swapchain we acquired during creation of swapchain to image views so we can actually use it
 
+    // Render Pass
+    VkRenderPass vulkanRenderPass = VK_NULL_HANDLE;
+    VkPipeline vulkanGraphicsPipeline = VK_NULL_HANDLE;
 public:
     VulkanRenderer(GLFWwindow* window);
     ~VulkanRenderer();
@@ -77,4 +80,5 @@ private:
 
     // Render Pass Implementation
     void createRenderPass();
+    void createGraphicsPipeline();
 };

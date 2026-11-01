@@ -27,9 +27,12 @@ void VulkanRenderer::initialize() {
     createLogicalDevice();
 
     createSwapchain();
+
+    createRenderPass();
 }
 
 void VulkanRenderer::cleanup() {
+    if(vulkanRenderPass != VK_NULL_HANDLE) vkDestroyRenderPass(vulkanLogicalDevice, vulkanRenderPass, nullptr);
     for(VkImageView& imageView : swapchainImageViews) {
         if(imageView != VK_NULL_HANDLE) vkDestroyImageView(vulkanLogicalDevice, imageView, nullptr);
     }
@@ -493,7 +496,107 @@ void VulkanRenderer::createSwapchain() {
 }
 
 void VulkanRenderer::createRenderPass() {
+    LOG_NOTICE("Attemting creation of Render Pass");
+    LOG_NOTICE("Creating struct for creation of Attachment Description");
+    // ---------------------- ATTACHMENT and ATTACHMENT DEPENDECY -----------------------------------
+    // For now only using 1 attachment becuase I will be using just the colors no depth for now
+    // An attachment corresponds to a single Vulkan VkImageView
+    // From what I read on samsung page, I have an understanding that the page load and store operations are targeted on images that will be used by current render pass start and store also targets when it ends not between subpasses
+    VkAttachmentDescription attachmentDescription = {};
+
+    attachmentDescription.format = this->selectedSurfaceFormat.format;
+    attachmentDescription.samples = VK_SAMPLE_COUNT_1_BIT; // Later used for MSAA and other features
+    attachmentDescription.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    attachmentDescription.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    attachmentDescription.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    attachmentDescription.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    attachmentDescription.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    attachmentDescription.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+
+    LOG_NOTICE("Creating struct for creation of Attachment Reference");
+    VkAttachmentReference colorAttachmentReference = {};
+    colorAttachmentReference.attachment = 0; // This index is the index of attachment that we pass to the render pass
+    colorAttachmentReference.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+
+    // ---------------------- SUBPASS DEPENDECY -----------------------------------
+    // LOG_NOTICE("Staring with all Subpass Creation");
+    // LOG_NOTICE("Creating struct for creation of Subpass Dependencies");
+    // LOG_NOTICE("First Subpass Dependency struct will be created.");
+    // VkSubpassDependency firstSubpassDependency = {};
+    // firstSubpassDependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    // firstSubpassDependency.dstSubpass = 0;
+    // firstSubpassDependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    // firstSubpassDependency.srcAccessMask = 0;
+    // firstSubpassDependency.dstStageMask  = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    // firstSubpassDependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+    // ---------------------- SUBPASS STRUCTS -----------------------------------
+    // First subpass don't takes input attachments, input attachments are the ones that comes from previous subpass
+    LOG_NOTICE("Creating first subpass.");
+    VkSubpassDescription firstSubpass = {};
+    firstSubpass.colorAttachmentCount = 1;
+    firstSubpass.pColorAttachments = &colorAttachmentReference;
+    firstSubpass.inputAttachmentCount = 0;
+    firstSubpass.pInputAttachments = nullptr;
+    firstSubpass.preserveAttachmentCount = 0;
+    firstSubpass.pPreserveAttachments = nullptr;
+    firstSubpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+
+    // ---------------------- RENDER PASS STRUCTS -----------------------------------
+    LOG_NOTICE("Implementing Render Pass");
     VkRenderPassCreateInfo renderPassCreateInfo = {};
 
     renderPassCreateInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassCreateInfo.attachmentCount = 1; // Number of framebuffer attachments used in this render pass (across all subpasses)
+    renderPassCreateInfo.pAttachments = &attachmentDescription;
+    renderPassCreateInfo.subpassCount = 1;
+    renderPassCreateInfo.pSubpasses = &firstSubpass;
+    // renderPassCreateInfo.dependencyCount = 1;
+    // renderPassCreateInfo.pDependencies = &firstSubpassDependency;
+    renderPassCreateInfo.dependencyCount = 0;
+    renderPassCreateInfo.pDependencies = nullptr;
+
+    VkResult result = vkCreateRenderPass(vulkanLogicalDevice, &renderPassCreateInfo, nullptr, &this->vulkanRenderPass);
+
+    if(result != VK_SUCCESS) {
+        LOG_CRITICAL("Unable to create render pass");
+        throw std::runtime_error("Unable to create render pass");
+    }
+
+    LOG_SUCCESS("Render Pass created successfully");
+}
+void VulkanRenderer::createGraphicsPipeline() {
+    // Stages
+    std::vector<VkPipelineShaderStageCreateInfo> stages;
+
+    VkPipelineShaderStageCreateInfo vertexShaderStage = {};
+    vertexShaderStage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    vertexShaderStage.stage = VK_SHADER_STAGE_VERTEX_BIT;
+    vertexShaderStage.flags = 0;
+    vertexShaderStage.pName = "Vertex Shader";
+
+    VkPipelineShaderStageCreateInfo fragShaderStage = {};
+    vertexShaderStage.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+    vertexShaderStage.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+    vertexShaderStage.flags = 0;
+    vertexShaderStage.pName = "Fragment Shader";
+
+    stages.push_back(vertexShaderStage);
+    stages.push_back(fragShaderStage);
+
+    // Some more info about stages
+    VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo = {};
+    vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+    vertexInputStateCreateInfo.pVertexAttributeDescriptions = nullptr;
+    vertexInputStateCreateInfo.pVertexBindingDescriptions = nullptr;
+    vertexInputStateCreateInfo.vertexAttributeDescriptionCount = 0;
+    vertexInputStateCreateInfo.vertexBindingDescriptionCount = 0;
+
+    VkGraphicsPipelineCreateInfo graphicsPipelineCreateInfo = {};
+    graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+    graphicsPipelineCreateInfo.stageCount = stages.size();
+    graphicsPipelineCreateInfo.pStages = stages.data();
+    graphicsPipelineCreateInfo.pVertexInputState = &vertexInputStateCreateInfo;
+
+    vkCreateGraphicsPipelines(vulkanLogicalDevice, VkPipelineCache pipelineCache, uint32_t createInfoCount, const VkGraphicsPipelineCreateInfo *pCreateInfos, nullptr, &vulkanGraphicsPipeline);
 }
